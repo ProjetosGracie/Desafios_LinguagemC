@@ -4,6 +4,7 @@
 #include "mapa.h"
 
 MAPA m;
+POSICAO heroi;
 
 int acabou(){
    return 0;
@@ -13,39 +14,36 @@ void move(char direcao){
    int x;
    int y;
 
-   // ache a posicao do fogefoge
-   for(int i =0; i <m.linhas; i++){
-      for(int j = 0; j <m.colunas; j++){
-         if(m.matriz[i][j] == '@'){
-            x =i;
-            y = j;
-            break;
+   // nao deixa ter dois pacmans no jogo
+   m.matriz[heroi.x][heroi.y] = '.';
 
-         }
-      }
-   }
    // comandos para o pacman andar 
    switch(direcao){
       case 'a':
-       m.matriz[x][y-1] = '@';
+       m.matriz[heroi.x][heroi.y-1] = '@';
+       heroi.y--;
        break;
       case 'w':
-       m.matriz[x-1][y] = '@';
+       m.matriz[heroi.x - 1][heroi.y] = '@';
+       heroi.x--;
        break;
       case 's':
-       m.matriz[x+1][y] = '@';
+       m.matriz[heroi.x+1][heroi.y] = '@';
+       heroi.x++;
        break;
       case 'd':
-       m.matriz[x][y+1] = '@';
+       m.matriz[heroi.x][heroi.y+1] = '@';
+       heroi.y++;
        break;
    }
-   // nao deixa ter dois pacmans no jogo
-   m.matriz[x][y] = '.';
-}
+} 
 
 int main(){
       
+ // Leu o mapa
+ // buscou a posicao que esta o heroi que esta representado pelo @
  lemapa(&m);
+ encontramapa(&m,&heroi,'@');
  
  do{
   imprimemapa(&m);
