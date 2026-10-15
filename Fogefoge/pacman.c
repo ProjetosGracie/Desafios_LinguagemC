@@ -1,28 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "pacman.h"
 
-// Papel que aponta para uma lista de papels, e cada um desses aponta para um texto
-char** mapa;
-// guarda a quantidade de linhas do mapa.
-int linhas;
-// guarda a quantidade de colunas.
-int colunas;
+struct mapa m;
 
 void liberamapa(){
- // Libera da alocacao na memoria 
- for(int i =0; i <linhas; i++){
-    free(mapa[i]);
+ // Libera da alo cacao na memoria 
+ for(int i =0; i <m.linhas; i++){
+    free(m.matriz[i]);
  }
- free(mapa);
+ free(m.matriz);
 }
 
 void alocamapa(){
  // Alocação dinamica na memoria 
  // reserve um espaço para linhas, devolve o endereço e guarda isso em mapa
- mapa = malloc(sizeof(char*)*linhas);
+ m.matriz = malloc(sizeof(char*)*m.linhas);
  // para cada linha, reserva espaço para o texto
- for(int i = 0; i<linhas;i++){ 
-    mapa[i] = malloc(sizeof(char)*(colunas+1));  // +1 é para o caractere especial 
+ for(int i = 0; i<m.linhas;i++){ 
+    m.matriz[i] = malloc(sizeof(char)*(m.colunas+1));  // +1 é para o caractere especial 
  }
 }
 
@@ -36,13 +32,13 @@ void lemapa(){
  }
 
  // coloca os dois primeiros numeros do "f" aqui
- fscanf(f,"%d %d", &linhas, &colunas);
+ fscanf(f,"%d %d", &(m.linhas), &(m.colunas));
 
   alocamapa();
 
  // Passar lendo cada linha
  for(int i = 0; i<5; i++){
-  fscanf(f,"%s",mapa[i]);
+  fscanf(f,"%s",m.matriz[i]);
  }
   fclose(f);
 }
@@ -50,8 +46,8 @@ void lemapa(){
 
 void imprimemapa(){
     //imprime o mapa
- for (int i = 0; i<linhas;i++){
-    printf("%s\n",mapa[i]);
+ for (int i = 0; i<m.linhas;i++){
+    printf("%s\n",m.matriz[i]);
  }
 }
 
@@ -65,9 +61,9 @@ void move(char direcao){
    int y;
 
    // ache a posicao do fogefoge
-   for(int i =0; i <linhas; i++){
-      for(int j = 0; j <colunas; j++){
-         if(mapa[i][j] == '@'){
+   for(int i =0; i <m.linhas; i++){
+      for(int j = 0; j <m.colunas; j++){
+         if(m.matriz[i][j] == '@'){
             x =i;
             y = j;
             break;
@@ -78,20 +74,20 @@ void move(char direcao){
    // comandos para o pacman andar 
    switch(direcao){
       case 'a':
-       mapa[x][y-1] = '@';
+       m.matriz[x][y-1] = '@';
        break;
       case 'w':
-       mapa[x-1][y] = '@';
+       m.matriz[x-1][y] = '@';
        break;
       case 's':
-       mapa[x+1][y] = '@';
+       m.matriz[x+1][y] = '@';
        break;
       case 'd':
-       mapa[x][y+1] = '@';
+       m.matriz[x][y+1] = '@';
        break;
    }
    // nao deixa ter dois pacmans no jogo
-   mapa[x][y] = '.';
+   m.matriz[x][y] = '.';
 }
 
 int main(){
