@@ -35,10 +35,11 @@ void lemapa(){
      exit(1);
  }
 
+ // coloca os dois primeiros numeros do "f" aqui
  fscanf(f,"%d %d", &linhas, &colunas);
 
   alocamapa();
-  
+
  // Passar lendo cada linha
  for(int i = 0; i<5; i++){
   fscanf(f,"%s",mapa[i]);
@@ -46,14 +47,64 @@ void lemapa(){
   fclose(f);
 }
 
+
+void imprimemapa(){
+    //imprime o mapa
+ for (int i = 0; i<linhas;i++){
+    printf("%s\n",mapa[i]);
+ }
+}
+
+
+int acabou(){
+   return 0;
+}
+
+void move(char direcao){
+   int x;
+   int y;
+
+   // ache a posicao do fogefoge
+   for(int i =0; i <linhas; i++){
+      for(int j = 0; j <colunas; j++){
+         if(mapa[i][j] == '@'){
+            x =i;
+            y = j;
+            break;
+
+         }
+      }
+   }
+   // comandos para o pacman andar 
+   switch(direcao){
+      case 'a':
+       mapa[x][y-1] = '@';
+       break;
+      case 'w':
+       mapa[x-1][y] = '@';
+       break;
+      case 's':
+       mapa[x+1][y] = '@';
+       break;
+      case 'd':
+       mapa[x][y+1] = '@';
+       break;
+   }
+   // nao deixa ter dois pacmans no jogo
+   mapa[x][y] = '.';
+}
+
 int main(){
       
  lemapa();
  
- //imprime o mapa
- for (int i = 0; i<5;i++){
-    printf("%s\n",mapa[i]);
- }
+ do{
+  imprimemapa();
 
+  char comando;
+  scanf(" %c",&comando);
+  move(comando);
+  
+ }while(!acabou());
  liberamapa();
 }   
